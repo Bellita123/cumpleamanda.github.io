@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Asistencia - Cumpleaños</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-image: url('https://i.imgur.com/MVIb75A.jpg'); 
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
+            text-align: center; 
+            padding: 20px; 
+            color: #333; 
+            position: relative; 
+        }
+        body::before { 
+            content: ""; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(255, 255, 255, 0.8); /* Opacidad blanca para legibilidad */ 
+            z-index: -1; 
+        }
+        .invitacion { 
+            max-width: 80%; 
+            margin: 20px auto; 
+            border-radius: 10px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.2); 
+        }
+        h1 { color: #ffd700; /* Dorado */ text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        h2 { color: #ffd700; }
+        p { color: #666; }
+        form { max-width: 400px; margin: auto; background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(255,215,0,0.3); border: 2px solid #ffd700; }
+        label { display: block; margin: 10px 0 5px; color: #333; }
+        input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ffd700; border-radius: 5px; background: #fff; }
+        .radio-group { text-align: left; margin-bottom: 10px; }
+        .radio-group label { display: inline-block; margin-right: 20px; }
+        button { background-color: #ffd700; color: #333; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #ffed4e; }
+        #confirmation { display: none; color: #ffd700; margin-top: 20px; }
+        iframe { width: 100%; height: 300px; border: 2px solid #ffd700; border-radius: 10px; margin-top: 20px; }
+        .ubicacion { margin-top: 30px; font-size: 1.2em; color: #ffd700; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <img src="https://i.imgur.com/6c01Pc6.jpg" alt="Invitación de Cumpleaños" class="invitacion">
+    
+    <h1>¡Confirma tu Asistencia al Cumpleaños!</h1>
+    <p>Sábado 29 de noviembre a las 21:00hs</p>
+    <p>Confírmanos tu asistencia para el cumpleaños de Amanda. ¡Te esperamos!</p>
+    
+    <form id="rsvpForm">
+        <label for="name">Nombre y Apellido:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label>¿Asistirás?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="attendance" value="Asistiré" required> Asistiré</label>
+            <label><input type="radio" name="attendance" value="No asistiré"> No asistiré</label>
+        </div>
+        
+        <button type="submit">Enviar Confirmación</button>
+    </form>
+    
+    <div id="confirmation">
+        <h2>¡Gracias por confirmar!</h2>
+        <p>Tu respuesta ha sido registrada. Te esperamos con ansias.</p>
+    </div>
+    
+    <div class="ubicacion">Ubicación</div>
+    <iframe src="https://maps.google.com/maps?q=Gaito%203129,%20Glew,%20Buenos%20Aires,%20Argentina&output=embed" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    
+    <script>
+        document.getElementById('rsvpForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Recopila los datos del formulario
+            const formData = new FormData(this);
+            
+            // Envía los datos a Formspree
+            fetch('https://formspree.io/f/xdkynjrn', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    // Si se envió bien, muestra la confirmación
+                    document.getElementById('rsvpForm').style.display = 'none';
+                    document.getElementById('confirmation').style.display = 'block';
+                } else {
+                    // Si hay error, muestra un mensaje
+                    alert('Error al enviar la confirmación. Intenta de nuevo.');
+                }
+            }).catch(error => {
+                // Manejo de errores de red
+                alert('Error de conexión. Revisa tu internet e intenta de nuevo.');
+            });
+        });
+    </script>
+</body>
+</html>
